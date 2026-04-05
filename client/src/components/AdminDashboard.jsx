@@ -12,20 +12,20 @@ const AdminDashboard = ({data}) => {
         {
             icon: Building2Icon,
             value: data.totalDepartments,
-            title: "Departments",
-            subtitle: "Organization units",
+            label: "Departments",
+            description: "Organization units",
         },
         {
             icon: CalendarIcon,
             value: data.todayAttendance,
-            title: "Today's Attendance",
-            subtitle: "Checked in today",
+            label: "Today's Attendance",
+            description: "Checked in today",
         },
         {
             icon: FileTextIcon,
             value: data.pendingLeaves,
-            title: "Pending Leaves",
-            subtitle: "Waiting approval",
+            label: "Pending Leaves",
+            description: "Waiting approval",
         },
     ]
   return (
