@@ -1,4 +1,4 @@
-import Employee from "../models/Employee";
+import Employee from "../models/Employee.js";
 
 // Get Profile
 // GET /api/profile
