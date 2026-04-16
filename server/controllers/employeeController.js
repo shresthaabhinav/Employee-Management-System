@@ -48,7 +48,7 @@ export const createEmployee = async(req, res)=>{
             email,
             phone,
             position,
-            department: department || "CSIT",
+            department: department || "Engineering",
             basicSalary: Number(basicSalary) || 0,
             allowances: Number(allowances) || 0,
             deductions: Number(deductions) || 0,
@@ -71,8 +71,7 @@ export const createEmployee = async(req, res)=>{
 export const updateEmployee = async(req, res)=>{
     try{
         const {id} = req.params;
-        const {firstName, lastName, email, phone, position, department, basicSalary, allowances, 
-            deductions, password, role, bio, employmentStatus } = req.body;
+        const {firstName, lastName, email, phone, position, department, basicSalary, allowances, deductions, password, role, bio, employmentStatus } = req.body;
 
         const employee = await Employee.findById(id);
         if(!employee) return res.status(404).json({error: "Employee not found"})
@@ -83,7 +82,7 @@ export const updateEmployee = async(req, res)=>{
             email,
             phone,
             position,
-            department: department || "CSIT",
+            department: department || "Engineering",
             basicSalary: Number(basicSalary) || 0,
             allowances: Number(allowances) || 0,
             deductions: Number(deductions) || 0,
