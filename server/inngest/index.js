@@ -111,7 +111,7 @@ const leaveApplicationReminder = inngest.createFunction(
   },
 );
 
-// Cron: Check attendance daily and email absent employees
+// Cron: Check attendance daily and email absent employee
 const attendanceReminderCron = inngest.createFunction(
   {
     id: "attendance-reminder-cron",
