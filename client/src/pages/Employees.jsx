@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react"
 import { dummyEmployeeData, DEPARTMENTS } from "../assets/assets"
 import EmployeeCard from "../components/EmployeeCard"
 import EmployeeForm from "../components/EmployeeForm"
+import api from "../api/fetch"
 
 const Employees = () => {
 
@@ -14,12 +15,17 @@ const Employees = () => {
   const [ showCreateModal, setShowCreateModal ] = useState(false)
 
   const fetchEmployees = useCallback(async()=>{
-    setLoading(true)
-    setEmployees(dummyEmployeeData.filter((emp)=>(selectedDept ? emp.department === selectedDept : emp)))
-    setTimeout(()=>{
+    try{
+      const url = selectedDept ? `/employees?department=${selectedDept}`: "/employees";
+
+      const res = await api(url, { method: "GET" })
+      setEmployees(res)
+    }catch(error){
+      console.error("Failed to fetch Employees");
+    }finally{
       setLoading(false)
-    },1000)
-  },[])
+    }
+  },[selectedDept])
 
   useEffect(()=>{
     fetchEmployees();
