@@ -1,17 +1,35 @@
 import React, { useState } from "react";
 import LoginLeftSide from "./LoginLeftSide";
 import { ArrowLeftIcon, EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-hot-toast"; // or your toast library
 
 const LoginForm = ({ role, title, subtitle }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await login(email, password, role);
+      navigate("/dashboard");
+    } catch (error) {
+      const message = error.message || "Login failed";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,6 +75,7 @@ const LoginForm = ({ role, title, subtitle }) => {
                 placeholder="abhinav@gmail.com"
               />
             </div>
+
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Password
@@ -64,25 +83,28 @@ const LoginForm = ({ role, title, subtitle }) => {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="pr-11"
                   placeholder="********"
                 />
-                <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2
-                text-slate-400 hover:text-slate-600 transition-colors" onClick={()=>setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeOffIcon size={18}/> : <EyeIcon size={18}/>}</button>
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                </button>
               </div>
             </div>
+
             <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-linear-to-r from-indigo-600
-            to-indigo-500 text-white rounded-md text-sm
-            font-semibold hover:from-indigo-700 hover:to-indigo-600 diabled:opacity-50
-            transition-all duration-200 shadow-lg shadow-indigo-500/25 active:scale-[0.98]
-            flex items-center justify-center">
-              {loading && <Loader2Icon className="animate-spin h-4 w-4 mr-2"/>}
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-linear-to-r from-indigo-600 to-indigo-500 text-white rounded-md text-sm font-semibold hover:from-indigo-700 hover:to-indigo-600 disabled:opacity-50 transition-all duration-200 shadow-lg shadow-indigo-500/25 active:scale-[0.98] flex items-center justify-center"
+            >
+              {loading && <Loader2Icon className="animate-spin h-4 w-4 mr-2" />}
               Sign In
             </button>
           </form>
