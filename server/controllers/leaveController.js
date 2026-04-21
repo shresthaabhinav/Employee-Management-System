@@ -3,7 +3,7 @@ import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
 
 // Create leave
-// POST /api/leaves
+// POST /api/leave
 export const createLeave = async(req, res)=>{
     try{
         const session = req.session;
@@ -11,7 +11,7 @@ export const createLeave = async(req, res)=>{
         if(!employee) return res.status(404).json({ error: "Employee not found" });
         if(employee.isDeleted){
             return res.status(403).json({
-                error: "Your account is desctivated. Your cannot apply for leave.",
+                error: "Your account is deactivated. You cannot apply for leave.",
             })
         }
 
@@ -45,14 +45,14 @@ export const createLeave = async(req, res)=>{
             data: {leaveApplicationId: leave._id,}
         })
 
-        return rwes.json({ success: true, data:leave });
+        return res.json({ success: true, data:leave });
     }
     catch(error){
         return res.status(500).json({ error: "Failed" });
     }
 }
 
-// Create leaves
+// Create leave
 // POST /api/leaves
 export const getLeaves = async(req, res)=>{
     try {
@@ -61,9 +61,9 @@ export const getLeaves = async(req, res)=>{
         if(isAdmin){
             const status = req.query.status;
             const where = status ? {status} : {};
-            const leaves = (await LeaveApplication.find(where).populate("employeeId")).sort({ createdAt : -1 });
+            const leaves = await LeaveApplication.find(where).populate("employeeId").sort({ createdAt : -1 });
             const data = leaves.map((l)=>{
-                const obh = l.toObject();
+                const obj = l.toObject();
                 return{
                     ...obj,
                     id: obj._id.toString(),
@@ -91,7 +91,7 @@ export const getLeaves = async(req, res)=>{
 }
 
 // Update leave status
-// POST /api/leaves/:id
+// PATCH /api/leaves/:id
 export const updateLeaveStatus = async(req, res)=>{
     try{
         const { status } = req.body;
