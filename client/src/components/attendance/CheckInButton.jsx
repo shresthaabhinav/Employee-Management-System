@@ -5,10 +5,10 @@ import api from "../../api/fetch";
 
 const CheckInButton = ({ todayRecord, onAction }) => {
   const [loading, setLoading] = useState(false);
+  const isCheckedIn = !!todayRecord?.checkIn;
 
   const handleAttendance = async () => {
     setLoading(true);
-
     try {
       await api("/attendance", {
         method: "POST",
@@ -35,7 +35,6 @@ const CheckInButton = ({ todayRecord, onAction }) => {
     );
   }
 
-  const isCheckedIn = !!todayRecord?.checkIn;
   return (
     <div className="absolute bottom-4 right-4 flex flex-col z-1">
       <button
