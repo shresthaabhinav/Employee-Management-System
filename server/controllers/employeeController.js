@@ -113,7 +113,7 @@ export const deleteEmployee = async(req, res)=>{
         const { id } = req.params;
 
         const employee = await Employee.findById(id)
-        if(employee) return res.status(404).json({error:
+        if(!employee) return res.status(404).json({error:
             "Employee not found"
         })
 

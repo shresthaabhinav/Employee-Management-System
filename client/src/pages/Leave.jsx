@@ -4,24 +4,37 @@ import Loading from "../components/Loading"
 import { ThermometerIcon, PalmtreeIcon, UmbrellaIcon, PlusIcon } from "lucide-react"
 import LeaveHistory from "../components/leave/LeaveHistory"
 import ApplyLeaveModal from "../components/leave/ApplyLeaveModal"
+import toast from "react-hot-toast"
+import { useAuth } from "../context/AuthContext"
+import api from "../api/fetch"
 
 const Leave = () => {
+ const {user} = useAuth()
  const [ leaves, setLeaves ] = useState([])
  const [ loading, setLoading ] = useState(true)
  const [ showModal, setShowModal ] = useState(false)
  const [ isDeleted, setIsDeleted ] = useState(false)
- const isAdmin = true;
+ const isAdmin = user?.role === "ADMIN";
 
- const fetchLeaves = useCallback(()=>{
-  setLeaves(dummyLeaveData)
-  setTimeout(()=>{
-    setLoading(false);
-  },1000);
- },[])
+const fetchLeaves = useCallback(async () => {
+  try {
+    const res = await api("/leave")
+    
+    setLeaves(res.data || res || [])
 
- useEffect(()=>{
-  fetchLeaves()
- },[fetchLeaves])
+    if (res.employee?.isDeleted || res.data?.employee?.isDeleted) {
+      setIsDeleted(true)
+    }
+  } catch (error) {
+    toast.error(error?.message)
+  } finally {
+    setLoading(false)
+  }
+}, [])
+
+  useEffect(() => {
+    fetchLeaves()
+  }, [fetchLeaves])
 
  if(loading) return <Loading />
 
@@ -37,6 +50,7 @@ const Leave = () => {
  ]
 
   return (
+    
     <div className="animate-fade-in">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
