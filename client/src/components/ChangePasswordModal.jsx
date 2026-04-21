@@ -1,5 +1,6 @@
 import { Loader2Icon, LockIcon, X } from "lucide-react";
 import React, { useState } from "react";
+import api from "../api/fetch";
 
 const ChangePasswordModal = ({ open, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -7,6 +8,26 @@ const ChangePasswordModal = ({ open, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDeafult();
+    setLoading(true);
+    setMessage({ type: "", text: "" });
+    const formData = new FormData(e.currentTarget);
+    const currentPassword = formData.get("currentPassowrd");
+    const newPassword = formData.get("newPassword");
+
+    try {
+      const data = await api("/auth/change-password", {
+        method: "POST",
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      setMessage({type: "success", text: "Password updated successfully"})
+      if (!data.success) throw new Error(data.error || "Failed");
+
+      e.target.reset();
+    } catch (error) {
+      setMessage({ type: "error", text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
   if (!open) return null;
 
@@ -35,33 +56,45 @@ const ChangePasswordModal = ({ open, onClose }) => {
         </div>
 
         <form className="p-6 space-y-5" onSubmit={handleSubmit}>
-            {message.text && (
-                <div className={`p-3 rounded-xl text-sm flex items-start gap-3 ${message.type === "success" ? "bg-emerald-50 text-emerald-200 border border-emerald-200" : "bg-rose-50 text-rose-700 border border-rose-200"}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${message.type === "success" ? "bg-emerald-500" : "bg-rose-500"}`}/>
-                    {message.text}
-                </div>
-            )}
-            <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                Current Password
-                </label>    
-                <input type="password" name="currentPassword" required/>
+          {message.text && (
+            <div
+              className={`p-3 rounded-xl text-sm flex items-start gap-3 ${message.type === "success" ? "bg-emerald-50 text-emerald-200 border border-emerald-200" : "bg-rose-50 text-rose-700 border border-rose-200"}`}
+            >
+              <div
+                className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${message.type === "success" ? "bg-emerald-500" : "bg-rose-500"}`}
+              />
+              {message.text}
             </div>
-            <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                New Password
-                </label>    
-                <input type="password" name="newPassword" required/>
-            </div>
-            <div className="flex gap-3 pt-2">
-                <button type="button" onClick={onClose} className="btn-secondary flex-1">
-                    Cancel
-                </button>
-                <button type="submit" disabled={loading} className="btn-primary flex-1 flex justify-center items-center gap-2">
-                    {loading && <Loader2Icon className="w-4 h-4 animate-spin"/>}
-                    Update Password
-                </button>
-            </div>
+          )}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Current Password
+            </label>
+            <input type="password" name="currentPassword" required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              New Password
+            </label>
+            <input type="password" name="newPassword" required />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-secondary flex-1"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary flex-1 flex justify-center items-center gap-2"
+            >
+              {loading && <Loader2Icon className="w-4 h-4 animate-spin" />}
+              Update Password
+            </button>
+          </div>
         </form>
       </div>
     </div>

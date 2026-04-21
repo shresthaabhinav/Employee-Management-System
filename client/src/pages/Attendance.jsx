@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import Loading from "../components/Loading"
 import { dummyAttendanceData } from "../assets/assets"
-import Gello from "../components/attendance/CheckInButton"
+import CheckInButton from "../components/attendance/CheckInButton"
 import AttendanceStats from "../components/attendance/AttendanceStats"
 import AttendanceHistory from "../components/attendance/AttendanceHistory"
 import api from "../api/fetch"
@@ -50,7 +50,7 @@ const Attendance = () => {
         </div>
           ):(
         <div className="mb-8">
-          <Gello todayRecord={todayRecord} onAction={fetchData}/>
+          <CheckInButton todayRecord={todayRecord} onAction={fetchData}/>
         </div>
       )}
       <AttendanceStats history={history}/>

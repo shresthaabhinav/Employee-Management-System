@@ -1,5 +1,5 @@
 import Payslip from "../models/Payslip.js";
-
+import Employee from "../models/Employee.js";
 // Create payslip
 // POST /api/payslips
 export const createPayslip = async (req, res) => {
