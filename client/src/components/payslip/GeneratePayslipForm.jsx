@@ -1,5 +1,7 @@
 import { Loader2, Plus, X } from 'lucide-react'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
+import api from '../../api/fetch'
 
 const GeneratePayslipForm = ({employees, onSuccess}) => {
     const [ isOpen, setIsOpen ] = useState(false)
@@ -13,13 +15,30 @@ const GeneratePayslipForm = ({employees, onSuccess}) => {
         </button>
     )
 
-    const handleSubmit = async(e) =>{
-        e.preventDefault();
-    }
+    const handleSubmit = async (e) => {
+  e.preventDefault()
+  setLoading(true)
 
+  const formData = new FormData(e.currentTarget)
+  const data = Object.fromEntries(formData.entries())
+
+  try {
+    await api("/payslips", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+
+    setIsOpen(false)
+    onSuccess()
+  } catch (error) {
+    toast.error(error.message || "Failed to create payslip")
+  } finally {
+    setLoading(false)
+  }
+}
 
   return (
-    <div className='fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50p-4'>
+    <div className='fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
         <div className='card max-w-lg w-full p-6 animate-slide-up'>
             <div className='flex justify-between items-center mb-6'>
                 <h3 className='text-lg font-bold text-slate-900'>Generate Monthly Payslip</h3>
@@ -47,7 +66,7 @@ const GeneratePayslipForm = ({employees, onSuccess}) => {
                         </label>
                         <select name="month">
                             {Array.from({length: 12},(_, i)=>i + 1).map((m)=>(
-                                <option value="">
+                                <option key={m} value={m}>
                                 {m}
                                 </option>
                                 ))}
