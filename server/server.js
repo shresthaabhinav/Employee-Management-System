@@ -10,7 +10,8 @@ import attendanceRouter from "./routes/attendanceRoutes.js";
 import leaveRouter from "./routes/leaveRoutes.js";
 import payslipRouter from "./routes/payslipsRoutes.js";
 import dashboardRouter from "./routes/dashboardRoutes.js";
-
+import dns from "dns"
+dns.setServers(['8.8.8.8', '8.8.4.4'])
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js"
 

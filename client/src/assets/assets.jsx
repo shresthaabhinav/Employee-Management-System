@@ -321,7 +321,7 @@ export function getDayTypeDisplay(record) {
         };
     }
     if (record.checkIn && !record.checkOut) {
-        return { label: "In Progress", className: "bg-indigo-100 text-indigo-700" };
+        return { label: "In Progress", className: "bg-green-100 text-green-700" };
     }
     return { label: "—", className: "" };
 }

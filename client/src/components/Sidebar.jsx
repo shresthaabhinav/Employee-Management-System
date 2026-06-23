@@ -102,14 +102,14 @@ const Sidebar = () => {
             const isActive = pathname.startsWith(item.href)
             return(
                 <Link key={item.name} to={item.href} className={`group flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px]
-                font-medium transition-all duration-150 relative ${isActive ? "bg-indigo-500/12 text-indigo-300" :
+                font-medium transition-all duration-150 relative ${isActive ? "bg-green-500/12 text-green-300" :
                  "text-slate-300 hover:text-white hover:bg-white/4"}`}>
                 {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5
-                rounded-r-full bg-indigo-500"/>}
-                <item.icon className={`w-[17px] h-[17px] shrink-0 ${isActive ? "text-indigo-300" : 
+                rounded-r-full bg-green-500"/>}
+                <item.icon className={`w-[17px] h-[17px] shrink-0 ${isActive ? "text-green-300" : 
                 "text-slate-400 group-hover:text-slate-300"}`}/>
                 <span className="flex-1">{item.name}</span>
-                {isActive && <ChevronRightIcon className="w-3.5 h-3.5 text-indigo-500/50"/>}
+                {isActive && <ChevronRightIcon className="w-3.5 h-3.5 text-green-500/50"/>}
                 </Link>
             )
         })

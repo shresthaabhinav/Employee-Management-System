@@ -44,7 +44,7 @@ const CheckInButton = ({ todayRecord, onAction }) => {
             p-4 rounded-xl bg-linear-to-br text-white ${
               isCheckedIn
                 ? "from-slate-700 to-slate-900"
-                : "from-indigo-600 to-indigo-700"
+                : "from-green-600 to-green-700"
             }`}
       >
         {loading ? (
